@@ -1,2 +1,2 @@
 # Qhack2022_solutions
- Qhack2022 coding challenge solutions
+ Qhack coding challenge 2022 (halo team)
