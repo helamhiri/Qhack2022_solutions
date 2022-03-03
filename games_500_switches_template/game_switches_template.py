@@ -19,47 +19,19 @@ def switch(oracle):
 
     dev = qml.device("default.qubit", wires=[0, 1, 2, "light"], shots=1)
     
-    def Ufo():
-        for i in range(3):
-            qml.Hadamard(wires=i)
-        #qml.Hadamard(wires="light")
-        arr=np.eye(2**4)
-        for i in range(1,2**4):
-            arr[i,i]=-1
-        qml.QubitUnitary(arr, wires=[0,1,2,"light"])
-
-        for i in range(3):
-            qml.Hadamard(wires=i)
-        #qml.Hadamard(wires=3)
+    
     @qml.qnode(dev)
     def circuit():
         
-        # QHACK #
-        qml.BasisState(np.array([0,0,0,0]),wires=[0, 1, 2, "light"])
         for i in range(3):
             qml.Hadamard(wires=i)
-
-        qml.PauliX(wires="light")       
-
+        qml.PauliX(wires="light")
         qml.Hadamard(wires="light")
-
-        oracle()
-        for i in range(3):
-              qml.Hadamard(wires=i)
-
-        Ufo()  
         
-        qml.CNOT(wires=[0,"light"])
-        qml.CNOT(wires=[1,"light"])
-        qml.CNOT(wires=[2,"light"])      
-        qml.ctrl(qml.Hadamard,control=[1,2,"light"])(wires=0)    
-        qml.ctrl(qml.Hadamard,control=[0,2,"light"])(wires=1)          
-        qml.ctrl(qml.Hadamard,control=[0,1,"light"])(wires=2)          
-        qml.CNOT(wires=[0,"light"])
-        qml.CNOT(wires=[1,"light"])
-        qml.CNOT(wires=[2,"light"])              
-
-        Ufo()
+        oracle()
+        
+        for i in range(3):
+            qml.Hadamard(wires=i)
 
 
         # QHACK #
@@ -67,23 +39,8 @@ def switch(oracle):
         return qml.sample(wires=[0,1,2])
 
     sample = circuit()
-    sample=np.array(sample)
-    res= sample[0]*1+sample[1]*2+sample[2]*4
-
-    if res==1:
-        return [0]
-    elif res==3:
-        return[0,1]
-    elif res==2:
-        return[1]
-    elif res==4:
-        return[2]
-    elif res==5:
-        return[0,2]
-    elif res==6:
-        return[1,2]
-    elif res==7:
-        return[0,1,2]
+    res=[i for i in range(3) if np.array(sample)[i]==1]
+    return res
 
 
 if __name__ == "__main__":
