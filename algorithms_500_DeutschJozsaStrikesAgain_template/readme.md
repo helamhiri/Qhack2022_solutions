@@ -1,6 +1,6 @@
 # Deutsch Jozsa Strikes Again
 
-I am writing this documentation to share with you the line of thinking that led me to the problem solution as well as explaining the code more thoroughly.
+I am writing this documentation to share with you the line of thinking that led me to the problem solution as well as to explain the code more thoroughly.
 
 Let’s first start with the problem statement:
 > The Deutsch-Jozsa algorithm was one of the first to demonstrate a quantum advantage. 
@@ -8,7 +8,7 @@ Let’s first start with the problem statement:
 > - f is constant: it always returns the same value (it can be 0 or 1). 
 > - f is balanced: half of the values, it takes the value 0 and for the other half, the value 1. 
 > 
-> An oracle with these characteristics needs three qubits: the first two qubits prepresent the input x, and the third qubit marks the output f(x). 
+> An oracle with these characteristics needs three qubits: the first two qubits represent the input x, and the third qubit marks the output f(x). 
 > 
 > Here, we will be looking at a variation of the original Deutsch-Jozsa problem: we are given four different functions f0, f1, f2 and f3 representing four different oracles which are either constant or balanced. As before, each oracle is a 3-qubit 1 operator: the first two qubits represent the input to the function and the third qubit is the output. We are guaranteed that this set of functions satisfies one of the following conditions: 
 > - All functions are constant. 
@@ -21,7 +21,7 @@ For the sake of the compactness of the explanation, I am going to go through som
 
 1. Oracle
 
-Given a function f:{0,1}<sup>N</sup> →{0,1} , it can be encoded with a combination of quantum gates such as:
+Given a function f:{0,1}<sup>N</sup> →{0,1} , it can be encoded with a combination of quantum gates such that:
 
 ![of1](./Images/of1.png)
 
@@ -32,7 +32,7 @@ In order to ensure this high order rule, a quantum oracle is rather represented 
 
 ![of2](./Images/of2.png)
 
-A more general representation of an oracle is the following where the ancillary qubit is arbitrary( a superposition of the basis states |0> and |1>) and the effect of encoding the function output in the ancillary qubit is given by the formula: y xor f(x).
+A more general representation of an oracle is the following where the ancillary qubit is arbitrary( a superposition of the basis states |0> and |1>) and the effect of encoding the function output in the ancillary qubit is given by the formula: y xor f(i).
 
 ![xor](./Images/xor.png)
 
