@@ -21,14 +21,13 @@ For the sake of the compactness of the explanation, I am going to go through som
 
 1. Oracle
 
-Given a function f:{0,1}<sup>N</sup> →{0,1} , it can be encoded with a combination of quantum gates such that:
+Given a function f:{0,1}<sup>N</sup> →{0,1} , it can be encoded with a combination of quantum gates such that the input is a bit string of length N (represented by n qubits) and the output is represented by a single qubit: y=f(i).
+
 
 ![of1](./Images/of1.png)
 
-The input is a bit string of length N (presented by n qubits) and the output is represented by a single qubit: y=f(i).
-
 But, as we know, quantum computation theory implies that any transformation should be unitary and thus invertible meaning that given the output of the oracle, one can systematically determine the input value.
-In order to ensure this high order rule, a quantum oracle is rather represented in this way where we add an ancillary qubit in which we encode the output of the function:
+In order to ensure this high order rule, a quantum oracle is rather represented in this way where we add an ancillary qubit in which we encode the output of the function while keeping the input qubits unchanged:
 
 ![of2](./Images/of2.png)
 
@@ -48,12 +47,22 @@ The goal of the Deutsh Josa algorithm is to determine whether a function of the 
 
 <img src="https://render.githubusercontent.com/render/math?math={|\phi1>=|0>^{n}|y> }">
 
+The hadamard transform on the state |0><sup>n</sup> creates a superposition of all possible basis states (2<sup>n</sup> basis states)
+
 <img src="https://render.githubusercontent.com/render/math?math={|\phi2>=H^{n}|\phi1>=\frac{1}{\sqrt{2^{n}}}\displaystyle\sum_{x \in \{0,1\}^{n}} |x>|y> }">
+
+The intuition behind applying the hadamard transform before applying the oracle is that we can obtain in a single state the evaluation of the f function on all Xs in the input space encoded in the amplitude of the corresponding basis state.
 
 <img src="https://render.githubusercontent.com/render/math?math={|\phi3>=U_{f} |\phi2> =\frac{1}{\sqrt{2^{n}}}\displaystyle\sum_{x \in \{0,1\}^{n}} U_{f}|x>|y>= \frac{1}{\sqrt{2^{n}}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}|x>|y>}">
 
+However, these amplitudes don't change the probability of measuring a particular state and all states are still equiprobable after this transformation since the probability of measuring a basis state |x> according to the born rule is : 
+<img src="https://render.githubusercontent.com/render/math?math={ p(x)= |<x|\phi>|^{2} =|\alpha_{i}|^{2} = \frac{1}{2^{n}} \text{ where  }\alpha_{i}= \left\{\begin{array}{ll} \frac{1}{\sqrt{2^{n}}} \\ \frac{-1}{\sqrt{2^{n}}}\end{array}\right.}">
 
-<img src="https://render.githubusercontent.com/render/math?math={|\phi4>=H^{n}|\phi3>=\frac{1}{\sqrt{2^{n}}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}H^{n}|x>|y> = \frac{1}{2^{n}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}\displaystyle\sum_{k \in \{0,1\}^{n}} (-1)^{k.x}|k>|y> = \displaystyle\sum_{k \in \{0,1\}^{n}} (\displaystyle\sum_{x \in \{0,1\}^{n}} \frac{1}{2^{n}}(-1)^{f(x) + k.x})|k>|y> = \displaystyle\sum_{k \in \{0,1\}^{n}} C_{k} |k>|y>}">
+That’s why we need to have the information about the evaluations of f on all basis states condensed in the amplitude of one basis state. Another hadamard transform will do the job. 
+
+<img src="https://render.githubusercontent.com/render/math?math={|\phi4>=H^{n}|\phi3>=\frac{1}{\sqrt{2^{n}}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}H^{n}|x>|y> = \frac{1}{2^{n}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}\displaystyle\sum_{k \in \{0,1\}^{n}} (-1)^{k.x}|k>|y> = \displaystyle\sum_{k \in \{0,1\}^{n}} (\displaystyle\sum_{x \in \{0,1\}^{n}} \frac{1}{2^{n}}(-1)^{f(x) %2B k.x})|k>|y> = \displaystyle\sum_{k \in \{0,1\}^{n}} C_{k} |k>|y>}">
+
+If we examine the amplitude C<sub>0</sub> of the |0><sup>n</sup> state, a very interesting result will emerge:
 
 <img src="https://render.githubusercontent.com/render/math?math={C_{0}=\frac{1}{2^{n}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}= \left\{\begin{array}{ll}1 \text{ if} f=0 \Rightarrow |\phi4>=|0>^{n}|y> \text{(because the state is normalized)}  \\ -1 \text{ if} f=1 \Rightarrow |\phi4>=-|0>^{n}|y>\\0 \text{ if} f balanced \Rightarrow |\phi4>=\displaystyle\sum_{\mathclap{k \in \{0,1\}^{n}, k \ne 0^{n}}} C_{k} |k>|y> \end{array}\right.   }">
 
