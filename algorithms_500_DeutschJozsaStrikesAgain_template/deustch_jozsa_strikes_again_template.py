@@ -15,28 +15,23 @@ def deutsch_jozsa(fs):
     Returns:
         - (str) : "4 same" or "2 and 2"
     """
-
+    
+   
     # QHACK 
-    dev = qml.device("default.qubit", wires=8,shots=1)
-    @qml.qnode(dev)
-    def oracle():
+    
+    def h_oracle():
         
-        # output qubit 2
+        #preparing the ancillary qubit(2) of the h oracle
         qml.PauliX(wires=2)
         qml.Hadamard(wires=2)
 
-        for i in range(2):
-            qml.Hadamard(wires=i)
-        # first two entries two th oracle [0,1]
-        #output wire 2
-        qml.PauliX(wires=5)
-        qml.Hadamard(wires=5)
-        # [3,4] wires for fi
-        for i in range(3,5):
-            qml.Hadamard(wires=i)
-        #controlled fi with wires [0,1]
-        # if 00 apply f0, 01 apply f1, 10 apply f2, 11 apply f3 on [3,4] controlled by [0,1]
-        # aditional 2 wires for controll [6 , 7]
+        
+        ################DJ circuit on the h oracle###############
+        
+            
+        #---------------implementing the h oracle---------------#
+        
+        #Preparing the multiplexer: we use 2 additional qubits(6 and 7) to create |1>|1> state for each i in {0,1,2,3}
         qml.PauliX(wires=0)
         qml.PauliX(wires=1)
         qml.CNOT(wires=[0,6])
@@ -44,18 +39,36 @@ def deutsch_jozsa(fs):
         qml.PauliX(wires=0)
         qml.PauliX(wires=1)
         
+        
+        ######DJ circuit on fi######
+        
+        #hadamard transform on input wires of fi oracle [3,4]
+        for i in range(3,5):
+            qml.Hadamard(wires=i)
+        
+        #preparing the ancillary qubit(5) of the fi oracle
+        qml.PauliX(wires=5)
+        qml.Hadamard(wires=5)
+        
+        #applying the fi oracle depending on the entry i using the multiplexer
         qml.ctrl(fs[3], control=[0,1])([3,4,5])
         qml.ctrl(fs[0], control=[6,7])([3,4,5])
         qml.ctrl(fs[1], control=[1,6])([3,4,5])
         qml.ctrl(fs[2], control=[0,7])([3,4,5])
         
         
+        #hadamard transform on input wires of fi oracle [3,4]
         for i in range(3,5):
             qml.Hadamard(wires=i)
             
+        ###########################
+        
+        
+        #flipping the ancillary qubit of the h oracle(2) if the state '00' is present 
+        #in the output state of the DJ circuit on fi
         qml.MultiControlledX(control_wires=[3,4], wires=2, control_values='00')
         
-        #kharaf
+        #All input wires [3,4,6,7] should return to their initial state 
         for i in range(3,5):
             qml.Hadamard(wires=i)
         qml.adjoint(qml.ctrl(fs[3], control=[0,1]))([3,4,5])
@@ -67,14 +80,23 @@ def deutsch_jozsa(fs):
             
         qml.CNOT(wires=[0,6])
         qml.CNOT(wires=[1,7])
+        ############################
+        
+        
+    dev = qml.device("default.qubit", wires=8,shots=1)
+    @qml.qnode(dev)
+    def DJ_h():
         
         for i in range(2):
-            qml.Hadamard(wires=i)   
-
+            qml.Hadamard(i)
+        h_oracle()
+        for i in range(2):
+            qml.Hadamard(i)
         return qml.probs(wires=[0,1])
+        
     
     
-    val=oracle()
+    val=DJ_h()
     #print(val)
     ch="4 same"
     if (val[0]<0.1):
@@ -82,6 +104,7 @@ def deutsch_jozsa(fs):
        
     return ch
     # QHACK #
+
 
 
 
