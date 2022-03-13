@@ -26,7 +26,7 @@ Given a function f:{0,1}<sup>N</sup> →{0,1} , it can be encoded with a combina
 
 ![of1](./Images/of1.png)
 
-But, as we know, quantum computation theory implies that any transformation should be unitary and thus invertible meaning that given the output of the oracle, one can systematically determine the input value.
+But, as we know, quantum computation theory implies that any transformation should be unitary and thus reversible meaning that given the output of the oracle, one can systematically determine the input value.
 In order to ensure this high order rule, a quantum oracle is rather represented in this way where we add an ancillary qubit in which we encode the output of the function while keeping the input qubits unchanged:
 
 ![of2](./Images/of2.png)
@@ -41,7 +41,7 @@ If we prepare the ancillary qubit in |-> state, we will obtain an oracle indepen
 
 2. Deutsch Jozsa algorithm
 
-The goal of the Deutsh Josa algorithm is to determine whether a function of the type  f:{0,1}<sup>N</sup> →{0,1} is constant or balanced using only one call to the corresponding oracle.
+The goal of the Deutsch Jozsa algorithm is to determine whether a function of the type  f:{0,1}<sup>N</sup> →{0,1} is constant or balanced using only one call to the corresponding oracle.
 
 ![dj](./Images/DJ_.png)
 
@@ -66,8 +66,14 @@ If we examine the amplitude C<sub>0</sub> of the |0><sup>n</sup> state, a very i
 
 <img src="https://render.githubusercontent.com/render/math?math={C_{0}=\frac{1}{2^{n}}\displaystyle\sum_{x \in \{0,1\}^{n}} (-1)^{f(x)}= \left\{\begin{array}{ll}1 \text{ if} f=0 \Rightarrow |\phi4>=|0>^{n}|y> \text{(because the state is normalized)}  \\ -1 \text{ if} f=1 \Rightarrow |\phi4>=-|0>^{n}|y>\\0 \text{ if} f balanced \Rightarrow |\phi4>=\displaystyle\sum_{\mathclap{k \in \{0,1\}^{n}, k \ne 0^{n}}} C_{k} |k>|y> \end{array}\right.   }">
 
+As a result, the probability of measuring the |0><sup>n</sup> state is:
+
+<img src="https://render.githubusercontent.com/render/math?math={ p(00..0)= |<0|\phi4>|^{2} =|C_{0}|^{2} =  \left\{\begin{array}{ll} 1 \text{ if f is constant} \\ 0 \text{ if f is balanced}\end{array}\right.}">
+
+And that's how, by making a single measurment, we can determine the nature of the boolean f function.
 
 All these details being set up, we are now ready to build our solution.
+
 We are now dealing with the following function: h:{f1,f2,f3,f4} → {0,1} modeled by this oracle:
 
 ![oh](./Images/oh.png)
@@ -76,9 +82,11 @@ As mentioned in the problem statement, the task at hand is to determine whether 
 
 Clearly, if we succeed in implementing such an oracle and feed it to the DJ circuit, our problem will be solved. 
 
-Now the question that should be raised is, during the implementation of the h oracle how can we determine for a specific input |i> if fi is whether constant or balanced ?
+Now the question that should be raised is, during the implementation of the h oracle how can we determine for a specific input |i> if f<sub>i</sub> is whether constant or balanced ?
 The best algorithm that we know of for this task is the DJ algorithm.
-Moreover, we notice that h(fi) is equal to the probability of the |00..000> basis state in the DJ fi circuit final state. Therefore, if we apply the following circuit and extract the information about the probability of the |00..000> basis state after applying DJ on fi we can obtain the desired output for the h oracle.
+Moreover, we notice that h(fi) is equal to the probability of the |00..000> basis state in the DJ fi circuit final state. In other words, If the |0><sup>n</sup> state is present in the final state of the DJ circuit applied on fi(meaning that fi is constant), then h should be equal to 1 and if the |0> state is absent (meaning that fi is balanced), then h should be equal to 0.
+This logical reasoning can be easily translated into a controlled gate which flips the h oracle ancillary qubit if the state |0><sup>n</sup> is present in the final state of the DJcircuit applied on fi.
+
 
 ![circuit](./Images/struct_annot.png)
 
