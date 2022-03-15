@@ -99,3 +99,7 @@ The structure of this gate is as follows:
 
 ![circuit](./Images/multiplexer.png)
 
+Finally, as mentioned above, the oracle input qubits should remain in their initial state so we need to reverse at the end of the oracle any transformation applied on them. This is the role of the reverse gate.
+In the code implementation, you will notice that I didn’t reverse the transformations applied on the ancillary qubit |z> of the f oracle because it is not entangled with the other input qubits so we can consider that its initial value as well as its final value are both |-> state.
+
+You will find the code implementation with comments using the same notations as in the documentation in this [notebook](./deustch_jozsa_strikes_again_template.py).
