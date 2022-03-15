@@ -76,7 +76,7 @@ And that's how, by making a single measurment, we can determine the nature of th
 
 All these details being set up, we are now ready to build our solution.
 
-We are now dealing with the following function: h:{f1,f2,f3,f4} → {0,1} modeled by this oracle:
+We are now dealing with the following function: h:{f0,f1,f2,f3} → {0,1} modeled by this oracle:
 
 ![oh](./Images/oh.png)
 
@@ -86,11 +86,13 @@ Clearly, if we succeed in implementing such an oracle and feed it to the DJ circ
 
 Now the question that should be raised is, during the implementation of the h oracle how can we determine for a specific input |i> if f<sub>i</sub> is whether constant or balanced ?
 The best algorithm that we know of for this task is the DJ algorithm.
-Moreover, we notice that h(fi) is equal to the probability of the |00..000> basis state in the DJ fi circuit final state. In other words, If the |0><sup>n</sup> state is present in the final state of the DJ circuit applied on fi(meaning that fi is constant), then h should be equal to 1 and if the |0> state is absent (meaning that fi is balanced), then h should be equal to 0.
+Moreover, we notice that h(fi) is equal to the probability of the |00..000> basis state in the "DJ fi" circuit final state. In other words, If the |0><sup>n</sup> state is present in the final state of the DJ circuit applied on fi(meaning that fi is constant), then h should be equal to 1 and if the |0> state is absent (meaning that fi is balanced), then h should be equal to 0.
 This logical reasoning can be easily translated into a controlled gate which flips the h oracle ancillary qubit if the state |0><sup>n</sup> is present in the final state of the DJcircuit applied on fi.
 
 
 ![circuit](./Images/struct_annot.png)
+
+Here is the general structure of the U<sub>h</sub> oracle.
 
 Another small detail is the multiplexer gate that will enable us to select the oracle fi in the DJ circuit when the input to the global oracle(h oracle) is |i>.
 The structure of this gate will be further explained in the code implementation.
