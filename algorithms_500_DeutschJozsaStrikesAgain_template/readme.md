@@ -39,6 +39,8 @@ If we prepare the ancillary qubit in |-> state, we will obtain an oracle indepen
 
 ![phase](./Images/phase_oracle.png)
 
+Note: This mapping formula could be simply obtained by developing “y xor f(i)” for y in {0,1}.
+
 2. Deutsch Jozsa algorithm
 
 The goal of the Deutsch Jozsa algorithm is to determine whether a function of the type  f:{0,1}<sup>N</sup> →{0,1} is constant or balanced using only one call to the corresponding oracle.
