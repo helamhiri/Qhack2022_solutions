@@ -90,12 +90,12 @@ Moreover, we notice that h(fi) is equal to the probability of the |00..000> basi
 This logical reasoning can be easily translated into a controlled gate which flips the h oracle ancillary qubit if the state |0><sup>n</sup> is present in the final state of the DJcircuit applied on fi.
 
 
-![circuit](./Images/struct_annot.png)
+![circuit](./Images/uh.png)
 
 Here is the general structure of the U<sub>h</sub> oracle.
 
-Another small detail is the multiplexer gate that will enable us to select the oracle fi in the DJ circuit when the input to the global oracle(h oracle) is |i>.
-The structure of this gate will be further explained in the code implementation.
+The multiplexer will enable us to select the oracle fi in the DJ circuit when the input to the global oracle(h oracle) is |i>.
+The structure of this gate is as follows:
 
-
+![circuit](./Images/multiplexer.png)
 
